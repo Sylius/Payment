@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Sylius\Component\Payment\Encryption;
 
-use ParagonIE\ConstantTime\Hex;
 use ParagonIE\Halite\Alerts\HaliteAlert;
 use ParagonIE\Halite\KeyFactory;
 use ParagonIE\Halite\Symmetric\Crypto;
@@ -31,8 +30,7 @@ final class Encrypter implements EncrypterInterface
     private ?EncryptionKey $key = null;
 
     public function __construct(
-        private readonly string $keyPhrase,
-        private readonly string $keySalt,
+        private readonly string $encryptionKey,
     ) {
     }
 
@@ -63,10 +61,7 @@ final class Encrypter implements EncrypterInterface
     private function getKey(): EncryptionKey
     {
         if (null === $this->key) {
-            $this->key = KeyFactory::deriveEncryptionKey(
-                new HiddenString($this->keyPhrase),
-                Hex::decode($this->keySalt),
-            );
+            $this->key = KeyFactory::importEncryptionKey(new HiddenString($this->encryptionKey));
         }
 
         return $this->key;
