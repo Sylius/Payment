@@ -31,4 +31,12 @@ final class EncryptionException extends \RuntimeException
             previous: $previousException,
         );
     }
+
+    public static function invalidKey(\Throwable $previousException): self
+    {
+        return new self(
+            message: 'Invalid encryption key.',
+            previous: $previousException,
+        );
+    }
 }

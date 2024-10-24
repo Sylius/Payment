@@ -13,7 +13,9 @@ declare(strict_types=1);
 
 namespace Sylius\Component\Payment\Encryption;
 
+use ParagonIE\Halite\Alerts\CannotPerformOperation;
 use ParagonIE\Halite\Alerts\HaliteAlert;
+use ParagonIE\Halite\Alerts\InvalidKey;
 use ParagonIE\Halite\KeyFactory;
 use ParagonIE\Halite\Symmetric\Crypto;
 use ParagonIE\Halite\Symmetric\EncryptionKey;
@@ -30,7 +32,7 @@ final class Encrypter implements EncrypterInterface
     private ?EncryptionKey $key = null;
 
     public function __construct(
-        private readonly string $encryptionKey,
+        private readonly string $encryptionKeyPath,
     ) {
     }
 
@@ -61,7 +63,11 @@ final class Encrypter implements EncrypterInterface
     private function getKey(): EncryptionKey
     {
         if (null === $this->key) {
-            $this->key = KeyFactory::importEncryptionKey(new HiddenString($this->encryptionKey));
+            try {
+                $this->key = KeyFactory::loadEncryptionKey($this->encryptionKeyPath);
+            } catch (CannotPerformOperation|InvalidKey $exception) {
+                throw EncryptionException::invalidKey($exception);
+            }
         }
 
         return $this->key;

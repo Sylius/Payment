@@ -21,7 +21,7 @@ final class EncrypterSpec extends ObjectBehavior
 {
     function let(): void
     {
-        $this->beConstructedWith('a_very_strong_password', '6081e27f4be703ebe4626fb40c40cb2c');
+        $this->beConstructedWith(__DIR__ . '/fixtures/encryption_key');
     }
 
     function it_is_an_encrypter(): void
@@ -31,13 +31,13 @@ final class EncrypterSpec extends ObjectBehavior
 
     function it_throws_an_exception_if_it_cannot_encrypt(): void
     {
-        $this->beConstructedWith('', '');
+        $this->beConstructedWith('');
         $this->shouldThrow(EncryptionException::class)->during('encrypt', ['data']);
     }
 
     function it_throws_an_exception_if_it_cannot_decrypt(): void
     {
-        $this->beConstructedWith('', '');
+        $this->beConstructedWith('');
         $this->shouldThrow(EncryptionException::class)->during('decrypt', ['data#ENCRYPTED']);
     }
 
