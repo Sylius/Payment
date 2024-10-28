@@ -17,7 +17,6 @@ use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 use Sylius\Component\Payment\Encryption\EncrypterInterface;
 use Sylius\Component\Payment\Encryption\EntityEncrypterInterface;
-use Sylius\Component\Payment\Encryption\PaymentRequestEncrypterInterface;
 use Sylius\Component\Payment\Model\PaymentRequestInterface;
 
 final class PaymentRequestEncrypterSpec extends ObjectBehavior
