@@ -22,6 +22,8 @@ use Sylius\Component\Payment\Model\PaymentRequestInterface;
  */
 final readonly class PaymentRequestEncrypter implements EntityEncrypterInterface
 {
+    use EncryptionCheckTrait;
+
     public function __construct(
         private EncrypterInterface $encrypter,
     ) {
@@ -43,8 +45,12 @@ final readonly class PaymentRequestEncrypter implements EntityEncrypterInterface
 
     public function decrypt(EncryptionAwareInterface $resource): void
     {
-        if (null !== $resource->getPayload()) {
+        if (null !== $resource->getPayload() && $this->isEncrypted($resource->getPayload())) {
             $resource->setPayload(unserialize($this->encrypter->decrypt($resource->getPayload())));
+        }
+
+        if (!$this->isEncrypted(current($resource->getResponseData()))) {
+            return;
         }
 
         $decryptedRequestData = [];

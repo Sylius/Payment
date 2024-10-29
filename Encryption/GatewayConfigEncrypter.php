@@ -22,6 +22,8 @@ use Sylius\Component\Payment\Model\GatewayConfigInterface;
  */
 final readonly class GatewayConfigEncrypter implements EntityEncrypterInterface
 {
+    use EncryptionCheckTrait;
+
     public function __construct(
         private EncrypterInterface $encrypter,
     ) {
@@ -39,6 +41,10 @@ final readonly class GatewayConfigEncrypter implements EntityEncrypterInterface
 
     public function decrypt(EncryptionAwareInterface $resource): void
     {
+        if (!$this->isEncrypted(current($resource->getConfig()))) {
+            return;
+        }
+
         $decryptedConfig = [];
         foreach ($resource->getConfig() as $key => $value) {
             $decryptedConfig[$key] = unserialize($this->encrypter->decrypt($value));

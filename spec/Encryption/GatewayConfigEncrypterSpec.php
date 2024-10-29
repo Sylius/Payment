@@ -78,7 +78,23 @@ final class GatewayConfigEncrypterSpec extends ObjectBehavior
 
         $encrypter->decrypt(Argument::any())->shouldNotBeCalled();
 
-        $gatewayConfig->setConfig([])->shouldBeCalled();
+        $gatewayConfig->setConfig(Argument::any())->shouldNotBeCalled();
+
+        $this->decrypt($gatewayConfig);
+    }
+
+    function it_does_not_decrypt_config_when_its_elements_are_not_encrypted_strings(
+        EncrypterInterface $encrypter,
+        GatewayConfigInterface $gatewayConfig,
+    ): void {
+        $gatewayConfig->getConfig()->willReturn([
+            'key' => 'not_encrypted_value',
+            'key-two' => 'not_encrypted_value',
+        ]);
+
+        $encrypter->decrypt(Argument::any())->shouldNotBeCalled();
+
+        $gatewayConfig->setConfig(Argument::any())->shouldNotBeCalled();
 
         $this->decrypt($gatewayConfig);
     }
@@ -87,9 +103,9 @@ final class GatewayConfigEncrypterSpec extends ObjectBehavior
         EncrypterInterface $encrypter,
         GatewayConfigInterface $gatewayConfig,
     ): void {
-        $gatewayConfig->getConfig()->willReturn(['key' => 'encrypted_value']);
+        $gatewayConfig->getConfig()->willReturn(['key' => 'encrypted_value#ENCRYPTED']);
 
-        $encrypter->decrypt('encrypted_value')->willReturn(serialize('value'));
+        $encrypter->decrypt('encrypted_value#ENCRYPTED')->willReturn(serialize('value'));
 
         $gatewayConfig->setConfig(['key' => 'value'])->shouldBeCalled();
 
@@ -100,11 +116,15 @@ final class GatewayConfigEncrypterSpec extends ObjectBehavior
         EncrypterInterface $encrypter,
         GatewayConfigInterface $gatewayConfig,
     ): void {
-        $gatewayConfig->getConfig()->willReturn(['key' => 'encrypted_value']);
+        $gatewayConfig->getConfig()->willReturn([
+            'key' => 'encrypted_value#ENCRYPTED',
+            'key-two' => 'encrypted_value-two#ENCRYPTED',
+        ]);
 
-        $encrypter->decrypt('encrypted_value')->willReturn(serialize(['value', 'some_other_value']));
+        $encrypter->decrypt('encrypted_value#ENCRYPTED')->willReturn(serialize(['value', 'some_other_value']));
+        $encrypter->decrypt('encrypted_value-two#ENCRYPTED')->willReturn(serialize('TWO'));
 
-        $gatewayConfig->setConfig(['key' => ['value', 'some_other_value']])->shouldBeCalled();
+        $gatewayConfig->setConfig(['key' => ['value', 'some_other_value'], 'key-two' => 'TWO'])->shouldBeCalled();
 
         $this->decrypt($gatewayConfig);
     }

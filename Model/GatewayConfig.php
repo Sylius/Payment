@@ -15,7 +15,7 @@ namespace Sylius\Component\Payment\Model;
 
 class GatewayConfig implements GatewayConfigInterface
 {
-    protected mixed $id;
+    protected mixed $id = null;
 
     protected ?string $factoryName = null;
 

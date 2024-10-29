@@ -18,6 +18,10 @@ use Sylius\Component\Payment\Encryption\Exception\EncryptionException;
 /** @experimental */
 interface EncrypterInterface
 {
+    public const ENCRYPTION_SUFFIX = '#ENCRYPTED';
+
+    public const ENCRYPTION_SUFFIX_LENGTH = 10;
+
     /** @throws EncryptionException */
     public function encrypt(string $data): string;
 

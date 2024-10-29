@@ -25,10 +25,6 @@ use Sylius\Component\Payment\Encryption\Exception\EncryptionException;
 /** @experimental */
 final class Encrypter implements EncrypterInterface
 {
-    private const ENCRYPTION_SUFFIX = '#ENCRYPTED';
-
-    private const ENCRYPTION_SUFFIX_LENGTH = 10;
-
     private ?EncryptionKey $key = null;
 
     public function __construct(
