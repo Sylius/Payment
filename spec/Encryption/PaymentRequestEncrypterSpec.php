@@ -135,7 +135,7 @@ final class PaymentRequestEncrypterSpec extends ObjectBehavior
         $this->decrypt($paymentRequest);
     }
 
-    function it_does_not_decrypt_payment_request_is_not_string(
+    function it_does_not_decrypt_if_payment_request_is_not_string(
         PaymentRequestInterface $paymentRequest,
         EncrypterInterface $encrypter,
     ): void {
