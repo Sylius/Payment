@@ -41,7 +41,7 @@ class PaymentRequest implements PaymentRequestInterface
 
     public function getId(): ?string
     {
-        return $this->getHash()?->toBinary();
+        return $this->getHash()?->__toString();
     }
 
     public function getHash(): ?Uuid
