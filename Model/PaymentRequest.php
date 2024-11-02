@@ -79,7 +79,7 @@ class PaymentRequest implements PaymentRequestInterface
         return $this->payload;
     }
 
-    public function setPayload(mixed $payload): void
+    public function setPayload(#[\SensitiveParameter] mixed $payload): void
     {
         $this->payload = $payload;
     }
@@ -89,7 +89,7 @@ class PaymentRequest implements PaymentRequestInterface
         return $this->responseData;
     }
 
-    public function setResponseData(array $responseData): void
+    public function setResponseData(#[\SensitiveParameter] array $responseData): void
     {
         $this->responseData = $responseData;
     }
