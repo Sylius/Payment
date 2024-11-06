@@ -44,6 +44,6 @@ interface PaymentRequestRepositoryInterface extends RepositoryInterface
     public function findOneByActionPaymentAndMethod(
         string $action,
         PaymentInterface $payment,
-        PaymentMethodInterface $paymentMethod
+        PaymentMethodInterface $paymentMethod,
     ): ?PaymentRequestInterface;
 }
