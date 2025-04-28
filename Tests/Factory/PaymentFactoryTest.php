@@ -32,7 +32,7 @@ final class PaymentFactoryTest extends TestCase
         $this->paymentFactory = new PaymentFactory($this->paymentFactoryMock);
     }
 
-    public function testImplementsSyliusShipmentFactoryInterface(): void
+    public function testImplementsPaymentFactoryInterface(): void
     {
         $this->assertInstanceOf(PaymentFactoryInterface::class, $this->paymentFactory);
     }

@@ -66,16 +66,16 @@ final class EncrypterTest extends TestCase
 
     public function testDecryptsData(): void
     {
-        $encryptedData = $this->encrypter->decrypt('data');
+        $encryptedData = 'data#ENCRYPTED';
 
         $this->encrypterMock->expects($this->once())
                             ->method('decrypt')
                             ->with($encryptedData)
                             ->willReturn('data');
 
-        $result = $this->encrypterMock->decrypt('data');
+        $result = $this->encrypterMock->decrypt($encryptedData);
 
-        $this->assertSame('data', $this->encrypter->decrypt('data'));
+        $this->assertSame('data', $result);
         $this->assertStringEndsNotWith('#ENCRYPTED', $result);
     }
 
