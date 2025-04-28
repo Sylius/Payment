@@ -24,8 +24,10 @@ use Sylius\Component\Payment\Model\PaymentRequestInterface;
 
 final class PaymentRequestTest extends TestCase
 {
+    /** @var PaymentInterface&MockObject */
     private MockObject $paymentMock;
 
+    /** @var PaymentMethodInterface&MockObject */
     private MockObject $methodMock;
 
     private PaymentRequest $paymentRequest;
@@ -110,8 +112,14 @@ final class PaymentRequestTest extends TestCase
 
     public function testItsResponseDataAreMutable(): void
     {
-        $this->paymentRequest->setResponseData(['foo', 'bar']);
-        $this->assertSame(['foo', 'bar'], $this->paymentRequest->getResponseData());
+        $this->paymentRequest->setResponseData([
+            'foo' => 'bar',
+            'bar' => 'foo'
+        ]);
+        $this->assertSame(
+            ['foo' => 'bar', 'bar' => 'foo'],
+            $this->paymentRequest->getResponseData()
+        );
     }
 
     public function testItsCreationDateIsMutable(): void

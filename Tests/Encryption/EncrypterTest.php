@@ -21,6 +21,7 @@ use Sylius\Component\Payment\Encryption\Exception\EncryptionException;
 
 final class EncrypterTest extends TestCase
 {
+    /** @var EncrypterInterface&MockObject */
     private MockObject $encrypterMock;
 
     private Encrypter $encrypter;

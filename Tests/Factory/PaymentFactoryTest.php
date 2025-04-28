@@ -24,6 +24,7 @@ final class PaymentFactoryTest extends TestCase
 {
     private MockObject $paymentFactoryMock;
 
+    /** @var PaymentFactory<PaymentInterface> */
     private PaymentFactory $paymentFactory;
 
     protected function setUp(): void
