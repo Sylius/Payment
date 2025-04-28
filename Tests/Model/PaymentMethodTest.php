@@ -104,7 +104,6 @@ final class PaymentMethodTest extends TestCase
 
     public function testEnabledByDefault(): void
     {
-//        $this->paymentMethod->shouldBeEnabled();
         self::assertTrue($this->paymentMethod->isEnabled());
     }
 
