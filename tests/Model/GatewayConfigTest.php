@@ -19,37 +19,39 @@ use Sylius\Component\Payment\Model\GatewayConfigInterface;
 
 final class GatewayConfigTest extends TestCase
 {
+    private GatewayConfig $gatewayConfig;
+
+    protected function setUp(): void
+    {
+        $this->gatewayConfig = new GatewayConfig();
+    }
+
     public function testItImplementsGatewayConfigInterface(): void
     {
-        $gatewayConfig = new GatewayConfig();
-        $this->assertInstanceOf(GatewayConfigInterface::class, $gatewayConfig);
+        $this->assertInstanceOf(GatewayConfigInterface::class, $this->gatewayConfig);
     }
 
     public function testItsGatewayNameIsMutable(): void
     {
-        $gatewayConfig = new GatewayConfig();
-        $gatewayConfig->setGatewayName('Offline');
-        $this->assertSame('Offline', $gatewayConfig->getGatewayName());
+        $this->gatewayConfig->setGatewayName('Offline');
+        $this->assertSame('Offline', $this->gatewayConfig->getGatewayName());
     }
 
     public function testItGetsFactoryNameFromConfigIfVariableNotSet(): void
     {
-        $gatewayConfig = new GatewayConfig();
-        $gatewayConfig->setConfig(['factory' => 'Offline']);
-        $this->assertSame('Offline', $gatewayConfig->getFactoryName());
+        $this->gatewayConfig->setConfig(['factory' => 'Offline']);
+        $this->assertSame('Offline', $this->gatewayConfig->getFactoryName());
     }
 
     public function testItsFactoryNameIsMutable(): void
     {
-        $gatewayConfig = new GatewayConfig();
-        $gatewayConfig->setFactoryName('Offline');
-        $this->assertSame('Offline', $gatewayConfig->getFactoryName());
+        $this->gatewayConfig->setFactoryName('Offline');
+        $this->assertSame('Offline', $this->gatewayConfig->getFactoryName());
     }
 
     public function testItsConfigIsMutable(): void
     {
-        $gatewayConfig = new GatewayConfig();
-        $gatewayConfig->setConfig(['key' => '123']);
-        $this->assertSame(['key' => '123'], $gatewayConfig->getConfig());
+        $this->gatewayConfig->setConfig(['key' => '123']);
+        $this->assertSame(['key' => '123'], $this->gatewayConfig->getConfig());
     }
 }

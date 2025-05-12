@@ -47,9 +47,10 @@ final class PaymentFactoryTest extends TestCase
     {
         $paymentMock = $this->createMock(PaymentInterface::class);
 
-        $this->paymentFactoryMock->expects($this->once())
-                                 ->method('createNew')
-                                 ->willReturn($paymentMock);
+        $this->paymentFactoryMock
+            ->expects($this->once())
+            ->method('createNew')
+            ->willReturn($paymentMock);
 
         $this->assertSame($paymentMock, $this->paymentFactory->createNew());
     }
@@ -58,15 +59,18 @@ final class PaymentFactoryTest extends TestCase
     {
         $paymentMock = $this->createMock(PaymentInterface::class);
 
-        $this->paymentFactoryMock->expects($this->once())
-                                 ->method('createNew')
-                                 ->willReturn($paymentMock);
-        $paymentMock->expects($this->once())
-                    ->method('setAmount')
-                    ->with(1234);
-        $paymentMock->expects($this->once())
-                    ->method('setCurrencyCode')
-                    ->with('EUR');
+        $this->paymentFactoryMock
+            ->expects($this->once())
+            ->method('createNew')
+            ->willReturn($paymentMock);
+        $paymentMock
+            ->expects($this->once())
+            ->method('setAmount')
+            ->with(1234);
+        $paymentMock
+            ->expects($this->once())
+            ->method('setCurrencyCode')
+            ->with('EUR');
 
         $this->paymentFactory->createWithAmountAndCurrencyCode(1234, 'EUR');
     }

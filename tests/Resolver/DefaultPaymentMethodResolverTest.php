@@ -24,14 +24,20 @@ use Sylius\Component\Payment\Resolver\DefaultPaymentMethodResolverInterface;
 
 final class DefaultPaymentMethodResolverTest extends TestCase
 {
-    private MockObject $paymentMethodRepositoryMock;
+    private MockObject $paymentMethodRepository;
 
     private DefaultPaymentMethodResolver $defaultPaymentMethodResolver;
 
+    /**
+     * @var PaymentInterface&MockObject
+     */
+    private MockObject $payment;
+
     protected function setUp(): void
     {
-        $this->paymentMethodRepositoryMock = $this->createMock(PaymentMethodRepositoryInterface::class);
-        $this->defaultPaymentMethodResolver = new DefaultPaymentMethodResolver($this->paymentMethodRepositoryMock);
+        $this->paymentMethodRepository = $this->createMock(PaymentMethodRepositoryInterface::class);
+        $this->defaultPaymentMethodResolver = new DefaultPaymentMethodResolver($this->paymentMethodRepository);
+        $this->payment = $this->createMock(PaymentInterface::class);
     }
 
     public function testImplementsDefaultPaymentMethodResolverInterface(): void
@@ -43,30 +49,29 @@ final class DefaultPaymentMethodResolverTest extends TestCase
     {
         $firstPaymentMethodMock = $this->createMock(PaymentMethodInterface::class);
         $secondPaymentMethodMock = $this->createMock(PaymentMethodInterface::class);
-        $paymentMock = $this->createMock(PaymentInterface::class);
 
-        $this->paymentMethodRepositoryMock->expects($this->once())
-                                          ->method('findBy')
-                                          ->with(['enabled' => true])
-                                          ->willReturn([$firstPaymentMethodMock, $secondPaymentMethodMock]);
+        $this->paymentMethodRepository
+            ->expects($this->once())
+            ->method('findBy')
+            ->with(['enabled' => true])
+            ->willReturn([$firstPaymentMethodMock, $secondPaymentMethodMock]);
 
         $this->assertSame(
             $firstPaymentMethodMock,
-            $this->defaultPaymentMethodResolver->getDefaultPaymentMethod($paymentMock)
+            $this->defaultPaymentMethodResolver->getDefaultPaymentMethod($this->payment)
         );
     }
 
     public function testThrowsExceptionIfThereAreNoEnabledPaymentMethods(): void
     {
-        $paymentMock = $this->createMock(PaymentInterface::class);
-
-        $this->paymentMethodRepositoryMock->expects($this->once())
-                                          ->method('findBy')
-                                          ->with(['enabled' => true])
-                                          ->willReturn([]);
+        $this->paymentMethodRepository
+            ->expects($this->once())
+            ->method('findBy')
+            ->with(['enabled' => true])
+            ->willReturn([]);
 
         $this->expectException(UnresolvedDefaultPaymentMethodException::class);
 
-        $this->defaultPaymentMethodResolver->getDefaultPaymentMethod($paymentMock);
+        $this->defaultPaymentMethodResolver->getDefaultPaymentMethod($this->payment);
     }
 }

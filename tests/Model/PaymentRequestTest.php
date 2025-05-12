@@ -14,9 +14,7 @@ declare(strict_types=1);
 namespace Tests\Sylius\Component\Payment\Model;
 
 use PHPUnit\Framework\MockObject\MockObject;
-use DateTime;
 use PHPUnit\Framework\TestCase;
-use stdClass;
 use Sylius\Component\Payment\Model\PaymentInterface;
 use Sylius\Component\Payment\Model\PaymentMethodInterface;
 use Sylius\Component\Payment\Model\PaymentRequest;
@@ -25,18 +23,18 @@ use Sylius\Component\Payment\Model\PaymentRequestInterface;
 final class PaymentRequestTest extends TestCase
 {
     /** @var PaymentInterface&MockObject */
-    private MockObject $paymentMock;
+    private MockObject $payment;
 
     /** @var PaymentMethodInterface&MockObject */
-    private MockObject $methodMock;
+    private MockObject $method;
 
     private PaymentRequest $paymentRequest;
 
     protected function setUp(): void
     {
-        $this->paymentMock = $this->createMock(PaymentInterface::class);
-        $this->methodMock = $this->createMock(PaymentMethodInterface::class);
-        $this->paymentRequest = new PaymentRequest($this->paymentMock, $this->methodMock);
+        $this->payment = $this->createMock(PaymentInterface::class);
+        $this->method = $this->createMock(PaymentMethodInterface::class);
+        $this->paymentRequest = new PaymentRequest($this->payment, $this->method);
     }
 
     public function testImplementsSyliusPaymentRequestInterface(): void
@@ -61,14 +59,14 @@ final class PaymentRequestTest extends TestCase
 
     public function testItsPaymentMethodIsMutable(): void
     {
-        $this->paymentRequest->setMethod($this->methodMock);
-        $this->assertSame($this->methodMock, $this->paymentRequest->getMethod());
+        $this->paymentRequest->setMethod($this->method);
+        $this->assertSame($this->method, $this->paymentRequest->getMethod());
     }
 
     public function testItsPaymentIsMutable(): void
     {
-        $this->paymentRequest->setPayment($this->paymentMock);
-        $this->assertSame($this->paymentMock, $this->paymentRequest->getPayment());
+        $this->paymentRequest->setPayment($this->payment);
+        $this->assertSame($this->payment, $this->paymentRequest->getPayment());
     }
 
     public function testHasNewStateByDefault(): void
@@ -100,7 +98,7 @@ final class PaymentRequestTest extends TestCase
 
     public function testItsPayloadIsMutable(): void
     {
-        $stdClass = new stdClass();
+        $stdClass = new \stdClass();
         $this->paymentRequest->setPayload($stdClass);
         $this->assertSame($stdClass, $this->paymentRequest->getPayload());
     }
@@ -124,7 +122,7 @@ final class PaymentRequestTest extends TestCase
 
     public function testItsCreationDateIsMutable(): void
     {
-        $date = new DateTime('last year');
+        $date = new \DateTime('last year');
 
         $this->paymentRequest->setCreatedAt($date);
         $this->assertSame($date, $this->paymentRequest->getCreatedAt());
@@ -137,7 +135,7 @@ final class PaymentRequestTest extends TestCase
 
     public function testItsLastUpdateDateIsMutable(): void
     {
-        $date = new DateTime('last year');
+        $date = new \DateTime('last year');
 
         $this->paymentRequest->setUpdatedAt($date);
         $this->assertSame($date, $this->paymentRequest->getUpdatedAt());

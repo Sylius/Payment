@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Tests\Sylius\Component\Payment\Exception;
 
-use Exception;
 use PHPUnit\Framework\TestCase;
 use Sylius\Component\Payment\Exception\UnresolvedDefaultPaymentMethodException;
 
@@ -22,7 +21,7 @@ final class UnresolvedDefaultPaymentMethodExceptionTest extends TestCase
     public function testItIsAnException(): void
     {
         $exception = new UnresolvedDefaultPaymentMethodException();
-        $this->assertInstanceOf(Exception::class, $exception);
+        $this->assertInstanceOf(\Exception::class, $exception);
     }
 
     public function testItHasACustomMessage(): void

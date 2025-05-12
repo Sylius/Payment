@@ -23,14 +23,20 @@ use Sylius\Resource\Doctrine\Persistence\RepositoryInterface;
 
 final class PaymentMethodsResolverTest extends TestCase
 {
-    private MockObject $methodRepositoryMock;
+    private MockObject $methodRepository;
 
     private PaymentMethodsResolver $paymentMethodsResolver;
 
+    /**
+     * @var PaymentInterface&MockObject
+     */
+    private MockObject $payment;
+
     protected function setUp(): void
     {
-        $this->methodRepositoryMock = $this->createMock(RepositoryInterface::class);
-        $this->paymentMethodsResolver = new PaymentMethodsResolver($this->methodRepositoryMock);
+        $this->methodRepository = $this->createMock(RepositoryInterface::class);
+        $this->paymentMethodsResolver = new PaymentMethodsResolver($this->methodRepository);
+        $this->payment = $this->createMock(PaymentInterface::class);
     }
 
     public function testImplementsMethodsResolverInterface(): void
@@ -40,24 +46,23 @@ final class PaymentMethodsResolverTest extends TestCase
 
     public function testReturnsAllMethodsEnabledForGivenPayment(): void
     {
-        $paymentMock = $this->createMock(PaymentInterface::class);
         $method1Mock = $this->createMock(PaymentMethodInterface::class);
         $method2Mock = $this->createMock(PaymentMethodInterface::class);
 
-        $this->methodRepositoryMock->expects($this->once())
-                                   ->method('findBy')
-                                   ->with(['enabled' => true])
-                                   ->willReturn([$method1Mock, $method2Mock]);
+        $this->methodRepository
+            ->expects($this->once())
+            ->method('findBy')
+            ->with(['enabled' => true])
+            ->willReturn([$method1Mock, $method2Mock]);
 
         $this->assertSame(
             [$method1Mock, $method2Mock],
-            $this->paymentMethodsResolver->getSupportedMethods($paymentMock)
+            $this->paymentMethodsResolver->getSupportedMethods($this->payment)
         );
     }
 
     public function testSupportsEveryPayment(): void
     {
-        $paymentMock = $this->createMock(PaymentInterface::class);
-        $this->assertTrue($this->paymentMethodsResolver->supports($paymentMock));
+        $this->assertTrue($this->paymentMethodsResolver->supports($this->payment));
     }
 }

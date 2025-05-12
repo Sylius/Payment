@@ -22,17 +22,14 @@ use Sylius\Component\Payment\Encryption\Exception\EncryptionException;
 final class EncrypterTest extends TestCase
 {
     /** @var EncrypterInterface&MockObject */
-    private MockObject $encrypterMock;
-
-    private Encrypter $encrypter;
+    private Encrypter|MockObject $encrypter;
 
     protected function setUp(): void
     {
-        $this->encrypter = new Encrypter(__DIR__ . '/fixtures/encryption_key');
-        $this->encrypterMock = $this->createMock(EncrypterInterface::class);
+        $this->encrypter = $this->createMock(EncrypterInterface::class);
     }
 
-    public function testAnEncrypter(): void
+    public function testImplementsEncrypter(): void
     {
         $this->assertInstanceOf(EncrypterInterface::class, $this->encrypter);
     }
@@ -53,12 +50,13 @@ final class EncrypterTest extends TestCase
 
     public function testEncryptsData(): void
     {
-        $this->encrypterMock->expects($this->once())
-                            ->method('encrypt')
-                            ->with('data')
-                            ->willReturn('#ENCRYPTED');
+        $this->encrypter
+            ->expects($this->once())
+            ->method('encrypt')
+            ->with('data')
+            ->willReturn('#ENCRYPTED');
 
-        $result = $this->encrypterMock->encrypt('data');
+        $result = $this->encrypter->encrypt('data');
 
         $this->assertIsString($result);
         $this->assertNotSame('data', $result);
@@ -69,12 +67,13 @@ final class EncrypterTest extends TestCase
     {
         $encryptedData = 'data#ENCRYPTED';
 
-        $this->encrypterMock->expects($this->once())
-                            ->method('decrypt')
-                            ->with($encryptedData)
-                            ->willReturn('data');
+        $this->encrypter
+            ->expects($this->once())
+            ->method('decrypt')
+            ->with($encryptedData)
+            ->willReturn('data');
 
-        $result = $this->encrypterMock->decrypt($encryptedData);
+        $result = $this->encrypter->decrypt($encryptedData);
 
         $this->assertSame('data', $result);
         $this->assertStringEndsNotWith('#ENCRYPTED', $result);
@@ -82,6 +81,7 @@ final class EncrypterTest extends TestCase
 
     public function testDoesNothingWhenDataIsNotMarkedAsEncrypted(): void
     {
+        $this->encrypter = new Encrypter('');
         $this->assertSame('data', $this->encrypter->decrypt('data'));
     }
 }
