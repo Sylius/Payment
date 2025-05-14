@@ -120,7 +120,7 @@ final class PaymentMethodTest extends TestCase
 
     public function testItsGatewayConfigIsMutable(): void
     {
-        /** @var GatewayConfigInterface|MockObject $gatewayConfigMock */
+        /** @var GatewayConfigInterface&MockObject $gatewayConfigMock */
         $gatewayConfigMock = $this->createMock(GatewayConfigInterface::class);
         $this->paymentMethod->setGatewayConfig($gatewayConfigMock);
         $this->assertSame($gatewayConfigMock, $this->paymentMethod->getGatewayConfig());
